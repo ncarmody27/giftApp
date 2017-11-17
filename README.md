@@ -13,12 +13,19 @@ Items
 
 Functions
 getUser [server side query done]
+
 getWishlist (has list of item ids)
+
 getItems (used by getWishlist to populate item data) 
+
 updateWishlist (adds if new, updates if already exists)
+
 updateItems (adds if new, updates if already exists)
+
 updateUser (used for User creation/updates)
+
 findItem (used to suggest items already created)
+
 Functionality
 Facebook user creation
 Link users to Facebook friends
