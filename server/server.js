@@ -1,116 +1,125 @@
-var mysql = require('mysql');
-
-/*var connection = mysql.createConnection({
-  host: "localhost",
-  user: "bear",
-  password: "s012515",
-	database: "mydb"
-});*/
-
-var pool = mysql.createPool({
-	connectionLimit : 100,
-	host: 'localhost',
-	user: 'root',
-	password:'s012515',
-	database: 'mydb',
-	debug:false
-	});
+const express = require('express');
+const app = express();
+//const port=3000;
+var port = process.env.PORT || 3000;        // set our port
+app.use(express.static('website'));
 
 
+var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient, assert = require('assert');
+var uri = 'mongodb://bear:Password-1@cluster0-shard-00-00-yqvw6.mongodb.net:27017,cluster0-shard-00-01-yqvw6.mongodb.net:27017,cluster0-shard-00-02-yqvw6.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
 
-function sqlQuery(query){
-	return new Promise(function(resolve, reject){
-		setTimeout(function(){
-			pool.getConnection(function(err,connection){
-				if (err) {
-					re.json({"code":100, "status" : "Error in connection database"});
-					return;
-				}	
-				console.log('connected as id ' + connection.threadId);
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-				connection.query(query, function(err, rows, fields) {
-				connection.release();
-				if (err) {
-					reject(new Error("no results were found!"));
-				} else {
-					resolve(rows);
-				}
-				})
-			})
-			
-		}, 2000);
-	});
-};
+// ROUTES FOR OUR API
+// =============================================================================
+var router = express.Router();              // get an instance of the express Router
 
-async function getUser (id){
-	// takes a string of user id, callback sets x to returned data
-	let sql = "SELECT * FROM users WHERE id = "+id;
-	let data = await sqlQuery(sql);
-	console.log(data);
-	return data;
+// middleware to use for all requests
+router.use(function(req, res, next) {
+    // do logging
+    console.log('Something is happening.');
+    next(); // make sure we go to the next routes and don't stop here
+});
+
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+router.get('/', function(req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });   
+});
+
+// more routes for our API will happen here
+
+// on routes that end in /bears
+// ----------------------------------------------------
+// create a bear (accessed at POST http://localhost:8080/api/bears)
+router.post('/bears', function (req, res) {
+	//console.log(req.query);
+	MongoClient.connect(uri, function(err, db) {
+		console.log("Connected successfully to server");
+		db.collection('bears').insertOne(req.query)
+		.then(function(result){
+			res.json({message: 'Bear created!'});
+			db.close();
+		})
+	})	
+});
+// get all the bears (accessed at GET http://localhost:8080/api/bears)
+router.get('/bears',function(req, res) {
+	var findDocuments = function(db, callback) {
+  // Get the documents collection
+		var collection = db.collection('bears');
+		// Find some documents
+		collection.find({}).toArray(function(err, docs) {
+			assert.equal(err, null);
+			console.log("Found the following records");
+			console.log(docs)
+			res.json(docs);
+			callback(docs);
+		});
 }
 
-//getUser('1');
+// Use connect method to connect to the server
+	MongoClient.connect(uri, function(err, db) {
+		assert.equal(null, err);
+		console.log("Connected correctly to server");
+    findDocuments(db, function() {
+      db.close();
+    });
+  });
+});
 
-var Item = require('./model.js');
-var Wishlist = require('./model.js');
-
-
-
-async function getWishlist(id){
-	//takes wishlist id returns wishlist item, calls getItem to populate items
-	let sql = "SELECT * FROM wishlists WHERE id = "+id;
-	let wishlist = await sqlQuery(sql);
-	wishlist=wishlist[0];
-	let items = wishlist.items;
-	items=items.split(',');
-	await Promise.all(items.map(async (item) => {
-    const contents = await getItem(item);
-    console.log(contents)
-  }));
-	let itemsI=[];
-	//itemsI.push(item);
+router.get('/bears/:bear_id',function(req, res){
+	console.log(req.params.bear_id);
+	test = require('assert');
 	
-	//wishlist = new Wishlist(wishlist.id,wishlist.name,wishlist.description,items,wishlist.owner)
-	console.log(wishlist);
-	return wishlist;
-}
+	/*
+	MongoClient.connect(uri, function(err, db) {
+		db.collection('bears').find(req.params.bear_id).toArray(function(err, docs){
+			res.json(docs);
+			db.close();
+		})
+		
+	})*/
+	(async function() {
+  let client;
 
-getWishlist('1');
+  try {
+    client = await MongoClient.connect(uri);
+    console.log("Connected correctly to server");
 
-async function getItem(id){
-	let sql = "SELECT * FROM items WHERE id = "+id;
-	let item = await sqlQuery(sql);
-	item = new Item(item[0].id,item[0].name,item[0].description,item[0].itemLink,item[0].imageLink,item[0].price);
-	console.log(item);
-	return item;
-}
+    const db = client.db('test');
 
-//getItem('1');
+    // Get the collection
+    const col = db.collection('bears');
 
-async function updateItem(id,name,description,itemLink,imageLink,price){
-	let sql = "UPDATE items SET id="+id+",name='"+name+"',description='"+description+"',itemLink='"+itemLink+"',imageLink='"+imageLink+"',price='"+price+"';";
-	//console.log (sql);
-	sqlQuery(sql);
-}
-//updateItem('3','Joey','A baby kangaroo soft plush','www.straya.com/joey','www.straya.com/joey.img','$15');
-//getItem('3');
+    // Get the cursor
+		var ObjectId = require('mongodb').ObjectId; 
+  	var id = req.params.bear_id;       
+		var o_id = new ObjectId(id);
+		
+    var cursor = col.find({_id:o_id});
+    // Iterate over the cursor
+    while(await cursor.hasNext()) {
+      const doc = await cursor.next();
+			console.log(`doc: ${doc}`);
+      console.dir(doc);
+			res.json(doc);
+    }
+  } catch (err) {
+    console.log(err.stack);
+  }
 
-/*
-getItems (used by getWishlist to populate item data) 
-updateWishlist (adds if new, updates if already exists)
-updateItems (adds if new, updates if already exists)
-updateUser (used for User creation/updates)
-findItem (used to suggest items already created)
-*/
+  // Close connection
+  client.close();
+})();
+});
+// REGISTER OUR ROUTES -------------------------------
+// all of our routes will be prefixed with /api
+app.use('/api', router);
 
-//myQuery = "";
-//sqlQuery(myQuery, callback);
-
-//sqlQuery('DESCRIBE users;',callback);
-//sqlQuery('DESCRIBE wishlists;',callback);
-//sqlQuery('DESCRIBE items;',callback);
-
-
-
-
+// START THE SERVER
+// =============================================================================
+app.listen(port,() => console.log(`Website listening on port: ${port}!`));
