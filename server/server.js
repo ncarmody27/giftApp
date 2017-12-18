@@ -1,18 +1,23 @@
-const express = require('express');
-const app = express();
-//const port=3000;
-var port = process.env.PORT || 3000;        // set our port
-app.use(express.static('website'));
+// server.js
 
+// BASE SETUP
+// =============================================================================
 
+// call the packages we need
+var express    = require('express');        // call express
+var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
+
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
+
 var uri = 'mongodb://bear:Password-1@cluster0-shard-00-00-yqvw6.mongodb.net:27017,cluster0-shard-00-01-yqvw6.mongodb.net:27017,cluster0-shard-00-02-yqvw6.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+var port = process.env.PORT || 8080;        // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -54,8 +59,7 @@ router.get('/bears',function(req, res) {
 		// Find some documents
 		collection.find({}).toArray(function(err, docs) {
 			assert.equal(err, null);
-			console.log("Found the following records");
-			console.log(docs)
+			//console.log(docs)
 			res.json(docs);
 			callback(docs);
 		});
@@ -71,50 +75,18 @@ router.get('/bears',function(req, res) {
   });
 });
 
-router.get('/bears/:bear_id',function(req, res){
-	console.log(req.params.bear_id);
+router.get('/bears/id/:_id',function(req, res){
+	//console.log(req.params);
 	test = require('assert');
-	
-	/*
+	var ObjectId = require('mongodb').ObjectId; 
+	var id = req.params._id;       
+	var o_id = new ObjectId(id);
 	MongoClient.connect(uri, function(err, db) {
-		db.collection('bears').find(req.params.bear_id).toArray(function(err, docs){
+		db.collection('bears').find({_id:o_id}).toArray(function(err, docs){
 			res.json(docs);
 			db.close();
 		})
-		
-	})*/
-	(async function() {
-  let client;
-
-  try {
-    client = await MongoClient.connect(uri);
-    console.log("Connected correctly to server");
-
-    const db = client.db('test');
-
-    // Get the collection
-    const col = db.collection('bears');
-
-    // Get the cursor
-		var ObjectId = require('mongodb').ObjectId; 
-  	var id = req.params.bear_id;       
-		var o_id = new ObjectId(id);
-		
-    var cursor = col.find({_id:o_id});
-    // Iterate over the cursor
-    while(await cursor.hasNext()) {
-      const doc = await cursor.next();
-			console.log(`doc: ${doc}`);
-      console.dir(doc);
-			res.json(doc);
-    }
-  } catch (err) {
-    console.log(err.stack);
-  }
-
-  // Close connection
-  client.close();
-})();
+	})
 });
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
@@ -122,4 +94,5 @@ app.use('/api', router);
 
 // START THE SERVER
 // =============================================================================
-app.listen(port,() => console.log(`Website listening on port: ${port}!`));
+app.listen(port);
+console.log('Magic happens on port ' + port);
