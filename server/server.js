@@ -16,6 +16,7 @@ var uri = 'mongodb://bear:Password-1@cluster0-shard-00-00-yqvw6.mongodb.net:2701
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static('client'));
 
 var port = process.env.PORT || 8080;        // set our port
 
