@@ -4,32 +4,35 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Gift List</h1>
-<h4>getWishlist</h4>
-<form id='get' action="">
-Wishlist Name:<br>
-<input type="text" name="wishlistName" value="test"><br>
-<input type="button" name="button" value="Submit" onclick="getWishlist(this.form)" >
+<h1>Gift App</h1>
+<h4>get All Bears</h4>
+<form id='get'>
+<input type="button" value="GET BEARS" onclick="getAllBears(form);">
 </form>
 
-<h3 id="name">Name</h3>
-<h4 id="owner">By Owner</h4>
-<table>
-<tr>
+<form id='getBear'>
+<input type="text" name="id" >
+<input type="button" value="GET BEAR BY ID" onclick="getBear(form);">
+</form>
 
-	<th>Name</th>
-	<th>Description</th>
-	<th>Image</th>
-	<th>Link</th>
-	<th>Price</th>
-</tr>
+<form id='postBear'>
+<input type="text" name="info" >
+<input type="button" value="Create BEAR" onclick="postBear(form);">
+</form>
 
-<tbody id="data">
-</tbody>
-</table>
+<form id='updateBear'>
+<input type="text" name="id" >
+<input type="text" name="info" >
+<input type="button" value="Update BEAR" onclick="updateBear(form);">
+</form>
+
+<div id='bears'>
+</div>
+
 
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="script.js"></script>
 </html>
