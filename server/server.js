@@ -71,12 +71,30 @@ static readId(collectionName, req, res){
 	})
 }
 //Update
-static update(){
-	
+static update(collectionName, req, res){
+	let ObjectId = require('mongodb').ObjectId; 
+	let id = req.params._id;       
+	let o_id = new ObjectId(id);
+	let value = req.query
+	MongoClient.connect(uri, function(err, db) {
+		db.collection(collectionName).updateOne({_id:o_id}, {$set:value},function(){
+			res.json({updated:true});
+			db.close();
+		})
+	})
 }
 //Delete
-static del(){
-	
+static del(collectionName, req, res){
+	let ObjectId = require('mongodb').ObjectId; 
+	let id = req.params._id;       
+	let o_id = new ObjectId(id);
+	let value = req.query
+	MongoClient.connect(uri, function(err, db) {
+		db.collection(collectionName).deleteOne({_id:o_id}, function(){
+			res.json({deleted:value});
+			db.close();
+		})
+	})
 }
 //end of CRUD operations
 }
@@ -95,14 +113,18 @@ router.get('/bears',function(req, res) {
 });
 
 //get bear by object id(defined by MongoDB) (accessed at GET http://localhost:8080/api/bears/id)
-router.get('/bears/id/:_id',function(req, res){
+router.get('/bears/:_id',function(req, res){
 	CRUD.readId('bears',req, res);	
 });
 
 //update bear will grab a bear, and update all that is new (accessed at POST http://localhost:8080/api/bears/id)
-router.post('/bears/id/:_id',function(req, res) {
-	res.json(req.param+{status: 'not implemented yet'});
-	console.log('update a bear');
+router.post('/bears/:_id',function(req, res) {
+	CRUD.update('bears',req,res);
+});
+
+//delete bear
+router.delete('/bears/:_id',function(req, res) {
+	CRUD.del('bears',req,res);
 });
 
 // REGISTER OUR ROUTES -------------------------------
@@ -112,4 +134,4 @@ app.use('/api', router);
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Listening on port ' + port);
