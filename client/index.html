@@ -5,25 +5,29 @@
 </head>
 <body>
 <h1>Gift App</h1>
-<h4>get All Bears</h4>
 <form id='get'>
 <input type="button" value="GET BEARS" onclick="getAllBears(form);">
 </form>
 
 <form id='getBear'>
-<input type="text" name="id" >
+ID: <input type="text" name="id" >
 <input type="button" value="GET BEAR BY ID" onclick="getBear(form);">
 </form>
 
 <form id='postBear'>
-<input type="text" name="info" >
+Name: <input type="text" name="name" >
 <input type="button" value="Create BEAR" onclick="postBear(form);">
 </form>
 
 <form id='updateBear'>
-<input type="text" name="id" >
-<input type="text" name="info" >
+ID: <input type="text" name="id" >
+Name: <input type="text" name="info" >
 <input type="button" value="Update BEAR" onclick="updateBear(form);">
+</form>
+
+<form id='deleteBear'>
+ID: <input type="text" name="id" >
+<input type="button" value="Delete BEAR" onclick="deleteBear(form);">
 </form>
 
 <div id='bears'>
