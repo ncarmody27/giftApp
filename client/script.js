@@ -1,4 +1,5 @@
 let uri = 'api/bears';
+let testV;
 
 function getAllBears(form){
 	$.ajax({
@@ -6,6 +7,7 @@ function getAllBears(form){
 		url: uri,
 		success: function(data){
 			console.log(data);
+			$('#bears').html(Object.entries(data).map(x=> `<p>name: ${x[1].name} id: ${x[1]._id}</p>`));
 		},
 		error: function(jqXHR, textStatus, err){
 			console.log(err);
@@ -20,7 +22,8 @@ function getBear(form){
 		type: 'GET',
 		url: uri + '/' +id,
 		success: function(data){
-			console.log(data);
+			testV = data;
+			$('#bears').html(`<p>name: ${data[0].name} id: ${data[0]._id}</p>`);
 		},
 		error: function(jqXHR, textStatus, err){
 			console.log(err);
@@ -29,11 +32,11 @@ function getBear(form){
 }
 
 function postBear(form){
-	let info = form.info.value;
-	console.log(info);
+	let name = form.name.value;
+	console.log(name);
 	$.ajax({
 		type: 'POST',
-		url: uri +'?'+ info,
+		url: uri +'?'+ 'name='+name,
 		success: function(data){
 			console.log(data);
 		},
@@ -46,12 +49,28 @@ function postBear(form){
 function updateBear(form){
 	let id = form.id.value;
 	let info = form.info.value;
-	console.log(info);
+	//console.log(info);
+	console.log(uri + '/'+id + '?'+"name="+info);
 	$.ajax({
 		type: 'POST',
-		url: uri + '/'+ id+ '?'+info,
+		url: uri + '/'+id + '?'+"name="+info,
 		success: function(data){
-			console.log(data);
+			//console.log(data);
+		},
+		error: function(jqXHR, textStatus, err){
+			console.log(err);
+		}
+	})
+}
+
+function deleteBear(form){
+	let id = form.id.value;
+	console.log(id);
+	$.ajax({
+		type: 'DELETE',
+		url: uri + '/' +id,
+		success: function(data){
+			$('#bears').html(`<p>BEAR DELETED, id: ${id}</p>`);
 		},
 		error: function(jqXHR, textStatus, err){
 			console.log(err);
