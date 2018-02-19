@@ -52,7 +52,6 @@ router.get('/', function(req, res) {
 // more routes for our API will happen here
 const request = require('request-promise');
 
-const userAccessToken = appAccess();
 router.post('/facebookUpsert', function(req, res){
 	var accessToken = req.query.accessToken;
 	var userID = req.query.userID;
@@ -70,7 +69,7 @@ router.post('/facebookUpsert', function(req, res){
 	request(options).then(fbRes => {
 		console.log(fbRes);
 		//upserts user info
-		CRUD.upsert('users', req, res);
+		//CRUD.upsert('users', req, res);
 		//logs in
 		CRUD.readEmail('users', req, res, function(err, user) {
     if (user === false) {

@@ -19,6 +19,24 @@
 The user will login, and the login will pass the user id to the api which will redirect the user to the
 pages they are allowed to access</p>
 <p>Flow: Login -> giftAppUrl/home (generates page based on user) </p>
+<h4>Week 17/02/2018</h4>
+<h5>Tasks</h5>
+<ul>
+	<li>create CRUD.upsert</li> 
+	<li>integrate CRUD.upsert with facebook login</li> 
+	<li>redirect to user page</li> 
+	<li>fix readEmail(returns more than one user)</li> 
+</ul>
+<h5>Updates</h5>
+<ul>
+	<li>Updated documentation and issues, set tasks for the weeks</li>
+	<li></li>
+	<li></li>
+</ul>
+<p><strong>end of week 16/02/2018</strong></p>
+<p>Implemented login using cookies, server can now read users login state</p>
+<p>Started implementing facebook login. Can now login with facebook, and server can access info. Need to upsert info, change cookie to logged in, then redirect to users homepage</p>
+<p>Past updates</p>
 <p>UPDATE: we are implementing a cookies session using npm module client-session. 
 This will use a cookie to tell the server your are logged on, the cookie is encrypted.
 It will have a 2 hour duration, increasing by 5 minutes by each user action</p>
