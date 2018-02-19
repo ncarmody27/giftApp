@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Gift App Signup</h1>
+<form id='login' method='post' action='http://localhost:8080/api/user'>
+Name: <input type="text" value="" name="name">
+Email: <input type="text" name="email" >
+Password: <input type="text" name="password" >
+<input type="submit" value="Submit" >
+<p><strong>{{error}}</strong></p>
+</form>
+
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="script.js"></script>
+</html>

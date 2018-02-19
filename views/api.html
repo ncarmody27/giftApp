@@ -1,0 +1,31 @@
+<!doctype HTML>
+<html>
+  <head><title>API</title></head>
+<body>
+
+<h3> Welcome {{ message }}</h3>
+
+<h4>API</h4>
+
+<h5>Create</h5>
+<p>HTTP POST /api/user/:userfields</p>
+<h5>Read</h5>
+<p>All: HTTP GET /api/users</p>
+<p>By ID: HTTP GET /api/user/:_id</p>
+<h5>Update</h5>
+<p>HTTP POST /api/user/:_id</p>
+<p>passes req.query as json object into mongoDB update ($set: req.query)</p>
+<h5>Delete</h5>
+<p>HTTP DELETE /api/user/:_id</p>
+<br>
+<h5>User login paths</h5>
+<p>login page GET /api/login</p>
+<p>renders login page. Will add error message on failed or expired login</p>
+<p>login submission POST /api/login</p>
+<p>Submits user login, creates cookie if login is valid. Redirects to user home</p>
+<br>
+<h5>/home</h5>
+<p> HTTP GET /home</p>
+<p>Renders user page from cookie, if no cookie present will redirect to login</p>
+</body> 
+</html>

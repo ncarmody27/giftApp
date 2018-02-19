@@ -5,38 +5,32 @@
 </head>
 <body>
 <h1>Gift App</h1>
-<form id='get'>
-<input type="button" value="GET BEARS" onclick="getAllBears(form);">
-</form>
-
-<form id='getBear'>
-ID: <input type="text" name="id" >
-<input type="button" value="GET BEAR BY ID" onclick="getBear(form);">
-</form>
-
-<form id='postBear'>
-Name: <input type="text" name="name" >
-<input type="button" value="Create BEAR" onclick="postBear(form);">
-</form>
-
-<form id='updateBear'>
-ID: <input type="text" name="id" >
-Name: <input type="text" name="info" >
-<input type="button" value="Update BEAR" onclick="updateBear(form);">
-</form>
-
-<form id='deleteBear'>
-ID: <input type="text" name="id" >
-<input type="button" value="Delete BEAR" onclick="deleteBear(form);">
-</form>
-
-<div id='bears'>
+<span>
+<a href="/api/login">Sign In</a>
+<a href="/signup">Sign Up</a>
+</span>
+<div='intro'>
+<h3>Welcome</h3>
+<p>Welcome to the GiftApp and app that will allow you to create wishlists from links, and allow you to share with your friends</p>
 </div>
-
-
-
+<div='news'>
+<h3>News</h3>
+<p>Currently we have implemented a user api that will be used to generate pages.
+The user will login, and the login will pass the user id to the api which will redirect the user to the
+pages they are allowed to access</p>
+<p>Flow: Login -> giftAppUrl/home (generates page based on user) </p>
+<p>UPDATE: we are implementing a cookies session using npm module client-session. 
+This will use a cookie to tell the server your are logged on, the cookie is encrypted.
+It will have a 2 hour duration, increasing by 5 minutes by each user action</p>
+<p><strong>UPDATE!</strong> User cookies are now implemented using a function to check session is valid.
+The home page will still need to be rendered, and creation of the wishlist and item api/database will be needed
+</p>
+</div>
+<div>
+<a href='/sitemap'>Sitemap</a>
+</div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="script.js"></script>
+<!--script src="script.js"></script-->
 </html>

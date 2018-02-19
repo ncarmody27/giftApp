@@ -1,0 +1,16 @@
+<!doctype HTML>
+<html>
+  <head><title>All Bears</title></head>
+  <body>
+	<table>
+	<tr>
+	<th>Name</th>
+	<th>Id</th></tr>
+	{% for item in bears %}
+	<tr>
+	<td>{{item.name}}</td> <td>{{item._id}}</td>
+	</tr>
+	{% endfor %}
+	</table>
+  </body>
+</html>
